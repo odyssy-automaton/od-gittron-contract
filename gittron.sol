@@ -8,9 +8,9 @@ import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/ownershi
  * ERC721
  * BaseToken can be registered by any user
  * Base token has a price that sets the price for child(normal) tokens. 
- * Base token has a withdrawAddr which is the contract/wallet address to forward funds to
- * Base token has an allowed amount stored from purchases of child(normal tokens)
- * only owner of the base token can trigger withdraw
+ * Base token as ha withdrawAddr wich is the forwarder to a contract/wallet
+ * Base token has an allowed amount stored for purchases of child(normal) tokens)
+ * only owner of the base token can withdraw
  * dev fee is subtracted from ammount allowed durring withdraw
  * a base token is requiered to launch rare token or normal token
  * BaseToken has a level which allows a number of free rare tokens
