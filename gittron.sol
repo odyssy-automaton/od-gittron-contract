@@ -20,6 +20,8 @@ import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/ownershi
  */
 contract TronToken is ERC721Full, Ownable {
     
+    using SafeMath for uint;
+    
     struct BaseToken {
         bool isOwner;
         bool enabled;
@@ -38,7 +40,7 @@ contract TronToken is ERC721Full, Ownable {
     uint[10] raresAvailible = [4,5,6,8,10,12,15,18,21,25];
     uint devFee = 20; // 20%
     uint minimumPrice = 10000000000000000; //.01
-    uint maximumPrice = 10000000000000000000; //10
+    uint maximumPrice = 1000000000000000000; //1
     address payable devFund;
     
     constructor(
@@ -128,11 +130,12 @@ contract TronToken is ERC721Full, Ownable {
             address(this).balance >= allowed_, 
             "insolvent");
         // is this ok?
-        uint devTake = ((allowed_ * 100) * devFee) / (100 * 100);
-        allowed_ = allowed_ - devTake;
+        ownersBaseToken[_baseTokenId][ownerOf(_baseTokenId)].allowed = 0;
+        uint devTake = allowed_.mul(100).mul(devFee).div(10000);
+        allowed_ = allowed_.sub(devTake);
         devFund.transfer(devTake);
         withdrawAddr_.transfer(allowed_);
-        ownersBaseToken[_baseTokenId][ownerOf(_baseTokenId)].allowed = 0;
+        
     }
     
     function metamorph(
@@ -195,7 +198,7 @@ contract TronToken is ERC721Full, Ownable {
     }
     
     function totalRareAvailible(uint _baseTokenId) public view returns (uint) {
-        return levels[ownersBaseToken[_baseTokenId][ownerOf(_baseTokenId)].level] - totalRare(_baseTokenId);
+        return raresAvailible[ownersBaseToken[_baseTokenId][ownerOf(_baseTokenId)].level] - totalRare(_baseTokenId);
     }
     
     function isBaseToken(uint _tokenId) public view returns (bool) {
