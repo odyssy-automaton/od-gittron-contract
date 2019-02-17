@@ -83,7 +83,7 @@ contract TronToken is ERC721Full, Ownable {
         require(
             msg.sender == ownerOf(_baseTokenId), "Not the base token holder");
         require(
-             totalRare(_baseTokenId) < levels[ownersBaseToken[_baseTokenId][msg.sender].level],
+             totalRareAvailible(_baseTokenId) > 0,
              "Maximum rare tokens have been minted");
         require(
             ownersBaseToken[_baseTokenId][msg.sender].enabled, "Disabled Base Token");
